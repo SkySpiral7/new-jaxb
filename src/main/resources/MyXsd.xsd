@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:tns="http://example.com/xml/example"
+        targetNamespace="http://example.com/xml/example">
+
+    <element name="MyRequest" type="tns:RequestType"/>
+    <element name="MyResponse" type="tns:ResponseType"/>
+
+    <complexType name="RequestType">
+        <sequence>
+            <element name="FieldName1" type="string"/>
+            <element name="FieldName2" type="string"/>
+        </sequence>
+    </complexType>
+
+    <complexType name="ResponseType">
+        <sequence>
+            <element name="FieldName1" type="string"/>
+            <element name="FieldName2" type="string"/>
+        </sequence>
+    </complexType>
+</schema>

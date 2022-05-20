@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <!--		<version>3.0.0-M2</version>-->
+        <version>2.6.7</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <groupId>com.example</groupId>
+    <artifactId>min-demo</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+
+    <name>min-demo</name>
+    <description>Demo project for Spring Boot</description>
+
+    <properties>
+        <java.version>11</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <jaxb.generatedSourceDirectory>${project.build.directory}/generated-sources/xjc</jaxb.generatedSourceDirectory>
+        <jaxb.schemaDirectory>${project.basedir}/src/main/resources</jaxb.schemaDirectory>
+
+        <!--Dependency Versions - maintain alphabetical order-->
+        <commons-beanutils.version>1.9.4</commons-beanutils.version>
+        <jakarta.xml.bind-api.version>2.3.3</jakarta.xml.bind-api.version>
+        <jaxb-runtime.version>2.3.6</jaxb-runtime.version>
+        <jaxb2-basics-annotate.version>1.1.0</jaxb2-basics-annotate.version>
+        <jaxb2-basics.version>0.12.0</jaxb2-basics.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <maven-dependency-plugin.version>3.2.0</maven-dependency-plugin.version>
+        <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
+        <maven-jaxb2-plugin.version>0.14.0</maven-jaxb2-plugin.version>
+        <jaxb2-maven-plugin.version>1.6</jaxb2-maven-plugin.version>
+
+        <osgi.additional.Import-Package>
+            javax.xml.bind;version="[2.2,3)",
+            javax.xml.bind.annotation;version="[2.2,3)"
+        </osgi.additional.Import-Package>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web-services</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!--This dependency is to address the security concern of commons-beanutils 1.9.3-->
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>${commons-beanutils.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>${jakarta.xml.bind-api.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>${jaxb-runtime.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.jaxb2_commons</groupId>
+            <artifactId>jaxb2-basics-annotate</artifactId>
+            <version>${jaxb2-basics-annotate.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jvnet.jaxb2_commons</groupId>
+                    <artifactId>jaxb2-basics-tools</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jvnet.jaxb2_commons</groupId>
+                    <artifactId>jaxb2-basics-project</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.jvnet.jaxb2_commons</groupId>
+            <artifactId>jaxb2-basics</artifactId>
+            <version>${jaxb2-basics.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <compilerVersion>${java.version}</compilerVersion>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <!--Generate the sources jar-->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>${maven-jar-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>create-jdk-classified-sources-jar</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>sources</classifier>
+                            <classesDirectory>${jaxb.generatedSourceDirectory}</classesDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>min-schemas</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>min</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jvnet.jaxb2.maven2</groupId>
+                        <artifactId>maven-jaxb2-plugin</artifactId>
+                        <version>${maven-jaxb2-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>generate-client-sources-from-schemas</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <specVersion>2.1</specVersion>
+                                    <forceRegenerate>true</forceRegenerate>
+                                    <strict>false</strict>
+                                    <extension>true</extension>
+                                    <schemaDirectory>src/main/resources</schemaDirectory>
+<!--                                    <schemaDirectory>${jaxb.schemaDirectory}</schemaDirectory>-->
+                                    <schemaIncludes>
+                                        <include>**/*.xsd</include>
+                                    </schemaIncludes>
+                                    <episode>true</episode>
+                                    <useDependenciesAsEpisodes>true</useDependenciesAsEpisodes>
+                                    <generateDirectory>${jaxb.generatedSourceDirectory}</generateDirectory>
+                                    <args>
+                                        <arg>-enableIntrospection</arg>
+                                        <arg>-XautoNameResolution</arg>
+                                        <arg>-Xequals</arg>
+                                        <arg>-XhashCode</arg>
+                                        <arg>-XtoString</arg>
+                                        <arg>-Xannotate</arg>
+                                        <arg>-Xcopyable</arg>
+                                        <arg>-Xsetters</arg>
+                                        <arg>-Xsetters-mode=direct</arg>
+                                    </args>
+                                    <plugins>
+                                        <plugin>
+                                            <groupId>org.jvnet.jaxb2_commons</groupId>
+                                            <artifactId>jaxb2-basics</artifactId>
+                                        </plugin>
+                                        <plugin>
+                                            <groupId>org.jvnet.jaxb2_commons</groupId>
+                                            <artifactId>jaxb2-basics-annotate</artifactId>
+                                        </plugin>
+                                    </plugins>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>us-schemas</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>us</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jvnet.jaxb2.maven2</groupId>
+                        <artifactId>maven-jaxb2-plugin</artifactId>
+                        <version>${maven-jaxb2-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <id>generate-client-sources-from-schemas</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <specVersion>2.1</specVersion>
+                                    <forceRegenerate>true</forceRegenerate>
+                                    <strict>false</strict>
+                                    <extension>true</extension>
+                                    <schemaDirectory>${jaxb.schemaDirectory}</schemaDirectory>
+                                    <schemaIncludes>
+                                        <include>**/*.xsd</include>
+                                    </schemaIncludes>
+                                    <episode>true</episode>
+                                    <useDependenciesAsEpisodes>true</useDependenciesAsEpisodes>
+                                    <generateDirectory>${jaxb.generatedSourceDirectory}</generateDirectory>
+                                    <!--The cat files tell JAXB where to find our dependency schemas.-->
+                                    <!--							<catalogs>-->
+                                    <!--								<catalog>-->
+                                    <!--									<fileset>-->
+                                    <!--										<directory>${project.basedir}</directory>-->
+                                    <!--										<includes>-->
+                                    <!--											<include>target/*.cat</include>-->
+                                    <!--										</includes>-->
+                                    <!--									</fileset>-->
+                                    <!--								</catalog>-->
+                                    <!--							</catalogs>-->
+                                    <!--							&lt;!&ndash;Bindings are used to set the package names of the generated classes.&ndash;&gt;-->
+                                    <!--							<bindings>-->
+                                    <!--								<binding>-->
+                                    <!--									<fileset>-->
+                                    <!--										<directory>${project.basedir}</directory>-->
+                                    <!--										<includes>-->
+                                    <!--											<include>target/bindings.xjb</include>-->
+                                    <!--										</includes>-->
+                                    <!--									</fileset>-->
+                                    <!--								</binding>-->
+                                    <!--							</bindings>-->
+                                    <args>
+                                        <arg>-enableIntrospection</arg>
+                                        <arg>-XautoNameResolution</arg>
+                                        <arg>-Xequals</arg>
+                                        <arg>-XhashCode</arg>
+                                        <arg>-XtoString</arg>
+                                        <arg>-Xannotate</arg>
+                                        <arg>-Xcopyable</arg>
+                                        <arg>-Xsetters</arg>
+                                        <arg>-Xsetters-mode=direct</arg>
+                                    </args>
+
+                                    <plugins>
+                                        <plugin>
+                                            <groupId>org.jvnet.jaxb2_commons</groupId>
+                                            <artifactId>jaxb2-basics</artifactId>
+                                            <version>${jaxb2-basics.version}</version>
+                                        </plugin>
+                                        <plugin>
+                                            <groupId>org.jvnet.jaxb2_commons</groupId>
+                                            <artifactId>jaxb2-basics-annotate</artifactId>
+                                            <version>${jaxb2-basics-annotate.version}</version>
+                                        </plugin>
+                                    </plugins>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>dozer-schemas</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+                <property>
+                    <name>dozer</name>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>jaxb2-maven-plugin</artifactId>
+                        <version>${jaxb2-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>xjc</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <!--							<arguments>-extension -npa</arguments>-->
+                            <workDirectory>${project.build.directory}/generated-resources/schemagen</workDirectory>
+                            <includes>MyXsd.xsd</includes>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.glassfish.jaxb</groupId>
+                                <artifactId>jaxb-runtime</artifactId>
+                                <version>2.4.0-b180830.0438</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+</project>
