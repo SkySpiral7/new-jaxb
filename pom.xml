@@ -5,7 +5,8 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <!--		<version>3.0.0-M2</version>-->
+        <!--<version>3.0.0-M1</version>-->
+        <!--<version>3.0.0-M2</version>-->
         <version>2.6.7</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
@@ -27,20 +28,21 @@
 
         <!--Dependency Versions - maintain alphabetical order-->
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
-        <jakarta.xml.bind-api.version>2.3.3</jakarta.xml.bind-api.version>
-        <jaxb-runtime.version>2.3.6</jaxb-runtime.version>
         <jaxb2-basics-annotate.version>1.1.0</jaxb2-basics-annotate.version>
         <jaxb2-basics.version>0.12.0</jaxb2-basics.version>
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-dependency-plugin.version>3.2.0</maven-dependency-plugin.version>
-        <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
         <maven-jaxb2-plugin.version>0.14.0</maven-jaxb2-plugin.version>
         <jaxb2-maven-plugin.version>1.6</jaxb2-maven-plugin.version>
 
-        <osgi.additional.Import-Package>
-            javax.xml.bind;version="[2.2,3)",
-            javax.xml.bind.annotation;version="[2.2,3)"
-        </osgi.additional.Import-Package>
+        <!--Override spring versions-->
+        <!--@Override jakarta.xml.bind:jakarta.xml.bind-api:2.3.3-->
+<!--        <jakarta-xml-bind.version>2.3.3</jakarta-xml-bind.version>-->
+<!--        &lt;!&ndash;@Override org.glassfish.jaxb:jaxb-runtime:2.3.6&ndash;&gt;-->
+<!--        <glassfish-jaxb.version>2.3.6</glassfish-jaxb.version>-->
+<!--        &lt;!&ndash;@Override org.apache.maven.plugins:maven-compiler-plugin:3.8.1&ndash;&gt;-->
+<!--        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>-->
+<!--        &lt;!&ndash;@Override org.apache.maven.plugins:maven-jar-plugin:3.2.2&ndash;&gt;-->
+<!--        <maven-jar-plugin.version>3.2.2</maven-jar-plugin.version>-->
     </properties>
 
     <dependencies>
@@ -48,6 +50,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web-services</artifactId>
         </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-web</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-jersey</artifactId>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -63,12 +73,12 @@
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>${jakarta.xml.bind-api.version}</version>
+            <!--Inherits <version>${jakarta-xml-bind.version}</version>-->
         </dependency>
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
-            <version>${jaxb-runtime.version}</version>
+            <!--Inherits <version>${glassfish-jaxb.version}</version>-->
         </dependency>
         <dependency>
             <groupId>org.jvnet.jaxb2_commons</groupId>
@@ -98,6 +108,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+            <!--@Override org.apache.maven.plugins:maven-compiler-plugin:3.8.1-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -109,6 +120,7 @@
                 </configuration>
             </plugin>
 
+            <!--@Override org.apache.maven.plugins:maven-jar-plugin:3.2.2-->
             <plugin>
                 <!--Generate the sources jar-->
                 <groupId>org.apache.maven.plugins</groupId>
@@ -131,68 +143,6 @@
     </build>
 
     <profiles>
-        <profile>
-            <id>min-schemas</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-                <property>
-                    <name>min</name>
-                </property>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.jvnet.jaxb2.maven2</groupId>
-                        <artifactId>maven-jaxb2-plugin</artifactId>
-                        <version>${maven-jaxb2-plugin.version}</version>
-                        <executions>
-                            <execution>
-                                <id>generate-client-sources-from-schemas</id>
-                                <phase>generate-resources</phase>
-                                <goals>
-                                    <goal>generate</goal>
-                                </goals>
-                                <configuration>
-                                    <specVersion>2.1</specVersion>
-                                    <forceRegenerate>true</forceRegenerate>
-                                    <strict>false</strict>
-                                    <extension>true</extension>
-                                    <schemaDirectory>src/main/resources</schemaDirectory>
-<!--                                    <schemaDirectory>${jaxb.schemaDirectory}</schemaDirectory>-->
-                                    <schemaIncludes>
-                                        <include>**/*.xsd</include>
-                                    </schemaIncludes>
-                                    <episode>true</episode>
-                                    <useDependenciesAsEpisodes>true</useDependenciesAsEpisodes>
-                                    <generateDirectory>${jaxb.generatedSourceDirectory}</generateDirectory>
-                                    <args>
-                                        <arg>-enableIntrospection</arg>
-                                        <arg>-XautoNameResolution</arg>
-                                        <arg>-Xequals</arg>
-                                        <arg>-XhashCode</arg>
-                                        <arg>-XtoString</arg>
-                                        <arg>-Xannotate</arg>
-                                        <arg>-Xcopyable</arg>
-                                        <arg>-Xsetters</arg>
-                                        <arg>-Xsetters-mode=direct</arg>
-                                    </args>
-                                    <plugins>
-                                        <plugin>
-                                            <groupId>org.jvnet.jaxb2_commons</groupId>
-                                            <artifactId>jaxb2-basics</artifactId>
-                                        </plugin>
-                                        <plugin>
-                                            <groupId>org.jvnet.jaxb2_commons</groupId>
-                                            <artifactId>jaxb2-basics-annotate</artifactId>
-                                        </plugin>
-                                    </plugins>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         <profile>
             <id>us-schemas</id>
             <activation>
@@ -226,28 +176,6 @@
                                     <episode>true</episode>
                                     <useDependenciesAsEpisodes>true</useDependenciesAsEpisodes>
                                     <generateDirectory>${jaxb.generatedSourceDirectory}</generateDirectory>
-                                    <!--The cat files tell JAXB where to find our dependency schemas.-->
-                                    <!--							<catalogs>-->
-                                    <!--								<catalog>-->
-                                    <!--									<fileset>-->
-                                    <!--										<directory>${project.basedir}</directory>-->
-                                    <!--										<includes>-->
-                                    <!--											<include>target/*.cat</include>-->
-                                    <!--										</includes>-->
-                                    <!--									</fileset>-->
-                                    <!--								</catalog>-->
-                                    <!--							</catalogs>-->
-                                    <!--							&lt;!&ndash;Bindings are used to set the package names of the generated classes.&ndash;&gt;-->
-                                    <!--							<bindings>-->
-                                    <!--								<binding>-->
-                                    <!--									<fileset>-->
-                                    <!--										<directory>${project.basedir}</directory>-->
-                                    <!--										<includes>-->
-                                    <!--											<include>target/bindings.xjb</include>-->
-                                    <!--										</includes>-->
-                                    <!--									</fileset>-->
-                                    <!--								</binding>-->
-                                    <!--							</bindings>-->
                                     <args>
                                         <arg>-enableIntrospection</arg>
                                         <arg>-XautoNameResolution</arg>
@@ -259,17 +187,14 @@
                                         <arg>-Xsetters</arg>
                                         <arg>-Xsetters-mode=direct</arg>
                                     </args>
-
                                     <plugins>
                                         <plugin>
                                             <groupId>org.jvnet.jaxb2_commons</groupId>
                                             <artifactId>jaxb2-basics</artifactId>
-                                            <version>${jaxb2-basics.version}</version>
                                         </plugin>
                                         <plugin>
                                             <groupId>org.jvnet.jaxb2_commons</groupId>
                                             <artifactId>jaxb2-basics-annotate</artifactId>
-                                            <version>${jaxb2-basics-annotate.version}</version>
                                         </plugin>
                                     </plugins>
                                 </configuration>
@@ -287,6 +212,12 @@
                     <name>dozer</name>
                 </property>
             </activation>
+            <properties>
+                <osgi.additional.Import-Package>
+                    javax.xml.bind;version="[2.2,3)",
+                    javax.xml.bind.annotation;version="[2.2,3)"
+                </osgi.additional.Import-Package>
+            </properties>
             <build>
                 <plugins>
                     <plugin>
