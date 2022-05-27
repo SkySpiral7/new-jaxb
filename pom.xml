@@ -49,6 +49,10 @@
             <artifactId>commons-beanutils</artifactId>
             <version>${commons-beanutils.version}</version>
         </dependency>
+        <dependency>
+            <groupId>wsdl4j</groupId>
+            <artifactId>wsdl4j</artifactId>
+        </dependency>
         <!--region glassfish-->
         <dependency>
             <groupId>org.glassfish</groupId>
