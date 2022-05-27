@@ -25,9 +25,7 @@
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <jaxb2-basics-annotate.version>1.1.0</jaxb2-basics-annotate.version>
         <jaxb2-basics.version>0.12.0</jaxb2-basics.version>
-        <maven-dependency-plugin.version>3.2.0</maven-dependency-plugin.version>
         <maven-jaxb2-plugin.version>0.14.0</maven-jaxb2-plugin.version>
-        <jaxb2-maven-plugin.version>1.6</jaxb2-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -38,10 +36,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jersey</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -60,6 +54,66 @@
             <artifactId>javax.activation-api</artifactId>
             <version>${javax-activation.version}</version>
         </dependency>
+        <!--region glassfish-->
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>jakarta.el</artifactId>
+            <version>${glassfish-el.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>codemodel</artifactId>
+            <version>${glassfish-jaxb.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>codemodel-annotation-compiler</artifactId>
+            <version>${glassfish-jaxb.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-jxc</artifactId>
+            <version>${glassfish-jaxb.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>${glassfish-jaxb.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-xjc</artifactId>
+            <version>${glassfish-jaxb.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>txw2</artifactId>
+            <version>${glassfish-jaxb.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>txwc2</artifactId>
+            <version>${glassfish-jaxb.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>xsom</artifactId>
+            <version>${glassfish-jaxb.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+            <version>${glassfish-jstl.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey</groupId>
+            <artifactId>jersey-bom</artifactId>
+            <version>${jersey.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <!--endregion glassfish-->
+        <!--region jakarta-->
         <dependency>
             <groupId>com.sun.activation</groupId>
             <artifactId>jakarta.activation</artifactId>
@@ -136,10 +190,27 @@
             <version>${jakarta-ws-rs.version}</version>
         </dependency>
         <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>${jakarta-xml-bind.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.xml.soap</groupId>
+            <artifactId>jakarta.xml.soap-api</artifactId>
+            <version>${jakarta-xml-soap.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.xml.ws</groupId>
+            <artifactId>jakarta.xml.ws-api</artifactId>
+            <version>${jakarta-xml-ws.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.sun.mail</groupId>
             <artifactId>jakarta.mail</artifactId>
             <version>${sun-mail.version}</version>
         </dependency>
+        <!--endregion jakarta-->
+        <!--region .xml-->
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
@@ -180,78 +251,7 @@
             <artifactId>xmlunit-placeholders</artifactId>
             <version>${xmlunit2.version}</version>
         </dependency>
-        <dependency>
-            <groupId>jakarta.xml.bind</groupId>
-            <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>${jakarta-xml-bind.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.xml.soap</groupId>
-            <artifactId>jakarta.xml.soap-api</artifactId>
-            <version>${jakarta-xml-soap.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.xml.ws</groupId>
-            <artifactId>jakarta.xml.ws-api</artifactId>
-            <version>${jakarta-xml-ws.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish</groupId>
-            <artifactId>jakarta.el</artifactId>
-            <version>${glassfish-el.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>codemodel</artifactId>
-            <version>${glassfish-jaxb.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>codemodel-annotation-compiler</artifactId>
-            <version>${glassfish-jaxb.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-jxc</artifactId>
-            <version>${glassfish-jaxb.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-runtime</artifactId>
-            <version>${glassfish-jaxb.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>jaxb-xjc</artifactId>
-            <version>${glassfish-jaxb.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>txw2</artifactId>
-            <version>${glassfish-jaxb.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>txwc2</artifactId>
-            <version>${glassfish-jaxb.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jaxb</groupId>
-            <artifactId>xsom</artifactId>
-            <version>${glassfish-jaxb.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.web</groupId>
-            <artifactId>jakarta.servlet.jsp.jstl</artifactId>
-            <version>${glassfish-jstl.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.jersey</groupId>
-            <artifactId>jersey-bom</artifactId>
-            <version>${jersey.version}</version>
-            <type>pom</type>
-            <scope>import</scope>
-        </dependency>
+        <!--endregion .xml-->
         <dependency>
             <groupId>org.jvnet.jaxb2_commons</groupId>
             <artifactId>jaxb2-basics-annotate</artifactId>
