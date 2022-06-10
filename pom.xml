@@ -25,7 +25,7 @@
         <commons-beanutils.version>1.9.4</commons-beanutils.version>
         <jaxb2-basics-annotate.version>1.1.0</jaxb2-basics-annotate.version>
         <jaxb2-basics.version>0.12.0</jaxb2-basics.version>
-        <maven-jaxb2-plugin.version>0.14.0</maven-jaxb2-plugin.version>
+        <jaxb2-maven-plugin.version>2.5.0</jaxb2-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -346,52 +346,22 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.jvnet.jaxb2.maven2</groupId>
-                        <artifactId>maven-jaxb2-plugin</artifactId>
-                        <version>${maven-jaxb2-plugin.version}</version>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>jaxb2-maven-plugin</artifactId>
+                        <version>${jaxb2-maven-plugin.version}</version>
                         <executions>
                             <execution>
-                                <id>generate-client-sources-from-schemas</id>
-                                <phase>generate-resources</phase>
+                                <id>xjc</id>
                                 <goals>
-                                    <goal>generate</goal>
+                                    <goal>xjc</goal>
                                 </goals>
-                                <configuration>
-                                    <specVersion>2.1</specVersion>
-                                    <forceRegenerate>true</forceRegenerate>
-                                    <strict>false</strict>
-                                    <extension>true</extension>
-                                    <schemaDirectory>${jaxb.schemaDirectory}</schemaDirectory>
-                                    <schemaIncludes>
-                                        <include>**/*.xsd</include>
-                                    </schemaIncludes>
-                                    <episode>true</episode>
-                                    <useDependenciesAsEpisodes>true</useDependenciesAsEpisodes>
-                                    <generateDirectory>${jaxb.generatedSourceDirectory}</generateDirectory>
-                                    <args>
-                                        <arg>-enableIntrospection</arg>
-                                        <arg>-XautoNameResolution</arg>
-                                        <arg>-Xequals</arg>
-                                        <arg>-XhashCode</arg>
-                                        <arg>-XtoString</arg>
-                                        <arg>-Xannotate</arg>
-                                        <arg>-Xcopyable</arg>
-                                        <arg>-Xsetters</arg>
-                                        <arg>-Xsetters-mode=direct</arg>
-                                    </args>
-                                    <plugins>
-                                        <plugin>
-                                            <groupId>org.jvnet.jaxb2_commons</groupId>
-                                            <artifactId>jaxb2-basics</artifactId>
-                                        </plugin>
-                                        <plugin>
-                                            <groupId>org.jvnet.jaxb2_commons</groupId>
-                                            <artifactId>jaxb2-basics-annotate</artifactId>
-                                        </plugin>
-                                    </plugins>
-                                </configuration>
                             </execution>
                         </executions>
+                        <configuration>
+                            <sources>
+                                <source>${project.basedir}/src/main/resources/MyXsd.xsd</source>
+                            </sources>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
